@@ -1,6 +1,7 @@
 import streamlit as st
 import subprocess
 import re
+import os
 
 def validate_input(user_input):
     if not user_input.strip():
@@ -12,6 +13,8 @@ def validate_input(user_input):
     return None
 
 def run_molecule_expansion(input_str):
+    if not os.access("./moleculeExpansion", os.X_OK):
+        os.chmod("./moleculeExpansion", 0o755)  # Grant execute permission
     try:
         result = subprocess.run(['./moleculeExpansion', input_str], capture_output=True, text=True, check=True)
         return result.stdout.strip()
